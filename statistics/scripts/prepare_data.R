@@ -29,15 +29,16 @@ wastewater_reads <- read_tsv(here(tables_dir, "ww-ra-summary.tsv")) %>%
   select(-all_reads)
 
 # Aggregate to species level and fill in zero counts for species unobserved in
-# each sample
-prepare_data <- function(all_species, metadata, read_data){
+# each sample. `numerator` selects the relative-abundance numerator column:
+# "dedup_hv" (deduplicated reads) or "non_dedup_hv" (non-deduplicated reads).
+prepare_data <- function(all_species, metadata, read_data, numerator = "dedup_hv"){
   all_species_and_samples <- crossing(all_species, metadata)
   # The taxonomic assignments go to below species level, but we want to analyze
   # at the species-level assignments
   read_data_species <- summarise(
     read_data,
     .by = c(date, location, species, group),
-    viral_reads = sum(dedup_hv)
+    viral_reads = sum(.data[[numerator]])
   )
   left_join(
     all_species_and_samples,
@@ -53,6 +54,15 @@ all_species <- bind_rows(swab_reads, wastewater_reads) %>%
   distinct %>%
   arrange(group, species)
 
+# Prepare both swab and wastewater data for a given numerator
+prepare_all <- function(numerator = "dedup_hv") {
+  list(
+    swab = prepare_data(all_species, swab_metadata, swab_reads, numerator),
+    wastewater = prepare_data(all_species, wastewater_metadata, wastewater_reads, numerator)
+  )
+}
+
+# Default (deduplicated) prepared data, used by the quarto notebooks
 swab_reads_complete <- prepare_data(
   all_species,
   swab_metadata,

@@ -1,0 +1,18 @@
+species	group	n_divergent	max_treedepth	n_max_treedepth	rhat_max
+SARS-CoV-2	Coronaviruses (SARS-CoV-2)	0	6	0	1.0013318769826804
+HCoV-229E	Coronaviruses (seasonal)	0	5	0	1.0014562991057956
+HCoV-HKU1	Coronaviruses (seasonal)	0	5	0	1.000916576547288
+HCoV-NL63	Coronaviruses (seasonal)	0	5	0	1.0020871553270212
+HCoV-OC43	Coronaviruses (seasonal)	0	5	0	1.0012713936834812
+Flu B	Influenza	0	5	0	1.0015509060984151
+H1N1	Influenza	0	6	0	1.0010289061063653
+H3N2	Influenza	0	6	0	1.0017702356158422
+HMPV-1	Mononegavirales	1	4	0	1.0006661557662133
+HPIV1	Mononegavirales	0	5	0	1.0006380912403183
+HPIV2	Mononegavirales	0	5	0	1.0005965069516807
+HPIV4	Mononegavirales	0	5	0	1.0022608984325236
+RSV-A	Mononegavirales	0	5	0	1.0026876977400858
+RSV-B	Mononegavirales	0	5	0	1.0033104611123105
+Rhinovirus A	Rhinoviruses	0	5	0	1.0007719239351618
+Rhinovirus B	Rhinoviruses	0	5	0	1.0033603206509043
+Rhinovirus C	Rhinoviruses	0	5	0	1.0013048876400745

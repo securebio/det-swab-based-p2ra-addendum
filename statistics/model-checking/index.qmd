@@ -33,6 +33,9 @@ source("../scripts/prepare_data.R")
 species_order <- all_species$species
 source("../scripts/define_model.R")
 
+# Relative-abundance numerator variant to display: "dedup" or "non_dedup"
+variant <- "dedup"
+
 # Colors borrowed from https://github.com/JLSteenwyk/ggpubfigs
 wong_eight <- c(
   "#E69F00",
@@ -246,7 +249,7 @@ These diagnostics help us assess the quality of the model fits:
 - Rhat values close to 1 indicate good convergence
 
 ```{r}
-diagnostics <- read_tsv(here(tables_dir, "model_diagnostics.tsv"))
+diagnostics <- read_tsv(here(tables_dir, variant, "model_diagnostics.tsv"))
 kable(diagnostics)
 ```
 
@@ -255,7 +258,7 @@ No problems here.
 # Posterior distributions
 
 ```{r}
-posteriors <- read_tsv(here(tables_dir, "posteriors.tsv"))
+posteriors <- read_tsv(here(tables_dir, variant, "posteriors.tsv"))
 ```
 
 ## Marginal posterior distributions

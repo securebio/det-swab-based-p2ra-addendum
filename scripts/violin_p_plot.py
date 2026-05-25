@@ -14,9 +14,12 @@ from fig_utils import (
 
 from metadata_utils import first_level_mapping, second_level_mapping
 
+# Relative-abundance numerator variant to plot: "dedup" or "non_dedup"
+VARIANT = "dedup"
+
 
 def load_and_process_data():
-    posteriors = pd.read_csv("tables/posteriors.tsv", sep="\t")
+    posteriors = pd.read_csv(f"tables/{VARIANT}/posteriors.tsv", sep="\t")
 
     # Get ordered species from virus_order module
     ordered_species = get_detected_species_order()

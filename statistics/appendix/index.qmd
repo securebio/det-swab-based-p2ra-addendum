@@ -36,6 +36,9 @@ theme_set(theme_minimal())
 source("../scripts/prepare_data.R")
 source("../scripts/define_model.R")
 
+# Relative-abundance numerator variant to display: "dedup" or "non_dedup"
+variant <- "dedup"
+
 # Colors borrowed from https://github.com/JLSteenwyk/ggpubfigs
 wong_eight <- c(
   "#E69F00",
@@ -409,7 +412,7 @@ the posterior distributions of these parameters are narrow compared to their pri
 #| fig-cap: "**Posterior (solid) and prior (dashed) distributions of prevalence**"
 #| warning: false
 
-posteriors <- read_tsv(here(tables_dir, "posteriors.tsv")) %>%
+posteriors <- read_tsv(here(tables_dir, variant, "posteriors.tsv")) %>%
   filter(group %in% c("Coronaviruses (SARS-CoV-2)", "Coronaviruses (seasonal)", "Rhinoviruses"))
 
 # To get a logit-spaced x-axis for both the prior and the posterior,

@@ -13,6 +13,9 @@ from fig_utils import (
 )
 from metadata_utils import second_level_mapping
 
+# Relative-abundance numerator variant to plot: "dedup" or "non_dedup"
+VARIANT = "dedup"
+
 outside_groups = {
     "Influenza A\n(previously)": "Influenza",
     "SARS-CoV-2\n(previously)": "Coronaviruses (SARS-CoV-2)",
@@ -25,7 +28,7 @@ outside_colors = {
 
 
 def load_posteriors():
-    posteriors = pd.read_csv("tables/posteriors.tsv", sep="\t")
+    posteriors = pd.read_csv(f"tables/{VARIANT}/posteriors.tsv", sep="\t")
 
     # Get ordered species from virus_order module
     species_order = get_detected_species_order()
