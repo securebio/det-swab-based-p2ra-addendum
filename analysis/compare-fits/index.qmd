@@ -1,0 +1,211 @@
+---
+title: Compare dedup and non-dedup model fits
+author: Mike McLaren
+date: last-modified
+categories: [ ]
+execute:
+  echo: true
+  warning: true
+  cache: false
+knitr:
+  opts_chunk:
+    message: false
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: false
+    fig-format: svg
+    fig-dpi: 250
+    fig-width: 8
+    fig-asp: 0.618
+    html-table-processing: none
+---
+
+```{r}
+library(tidyverse)
+library(here)
+library(cowplot)
+library(knitr)
+library(ggforce)
+library(ggdist)
+theme_set(theme_cowplot())
+
+# Okabe Ito color scheme with amber for yellow; see
+# https://easystats.github.io/see/reference/scale_color_okabeito.html
+colors_oi <- grDevices::palette.colors()
+colors_oi["yellow"] <- "#F5C710"
+colors_oi <- colors_oi |> unname()
+```
+
+This notebook compares the two model fits produced by `statistics/scripts/fit_model.R`, which differ only in the relative-abundance numerator: deduplicated human-virus reads (`dedup`) versus non-deduplicated reads (`non_dedup`). We first look at how duplication rates vary across samples and species, then compare the resulting posterior estimates of prevalence and $RA_p(1\%)$, and finally compare the full posteriors of the model parameters.
+
+## Duplication rates across samples
+
+```{r}
+ra_summary <- bind_rows(
+  .id = "sample_type",
+  list(
+    swabs = read_tsv(here("tables", "swabs-ra-summary.tsv")),
+    ww = read_tsv(here("tables", "ww-ra-summary.tsv"))
+  )
+) |>
+  summarise(
+    .by = c(sample_type, date, location, species, group),
+    non_dedup_hv = sum(non_dedup_hv),
+    dedup_hv = sum(dedup_hv),
+  ) |>
+  mutate(dup_rate = 1 - dedup_hv / non_dedup_hv)
+```
+
+```{r}
+ra_summary |>
+  filter(non_dedup_hv > 0) |>
+  ggplot(aes(x = dup_rate, y = species, color = group)) +
+  geom_point(alpha = 0.6) +
+  facet_wrap(~sample_type, scales = "free_x") +
+  scale_color_manual(values = colors_oi) +
+  guides(color = guide_legend(ncol = 2)) +
+  labs(x = "Duplication rate", y = NULL) +
+  theme(legend.position = "bottom")
+```
+
+```{r}
+ra_summary |>
+  filter(non_dedup_hv > 0) |>
+  group_by(species, group, sample_type) |>
+  summarize(median_dup_rate = median(dup_rate), n = n(), .groups = "drop") |>
+  pivot_wider(names_from = sample_type,
+    values_from = c(median_dup_rate, n)) |>
+  arrange(group, species) |>
+  kable(digits = 2)
+```
+
+In wastewater, SARS-CoV-2 and Influenza both have significantly lower duplication rates than other viruses. This lower rate could reflect limitations in how duplicates are detected in the pipeline: For species that have a large number of genetically similar reference genomes available, reads that are genetically similar (or identical) can be randomly split between different references, preventing the pipeline from detecting the reads as duplicates.
+
+## Compare posterior summaries: dedup vs non-dedup numerator
+
+```{r}
+read_posterior_summary <- function(parameter) {
+  bind_rows(
+    .id = "variant",
+    list(
+      dedup = read_tsv(here("tables", "dedup",
+        paste0(parameter, "_posterior_summary.tsv"))),
+      non_dedup = read_tsv(here("tables", "non_dedup",
+        paste0(parameter, "_posterior_summary.tsv")))
+    )
+  )
+}
+
+format_comparison <- function(df, fmt = \(x) formatC(x, format = "g", digits = 2)) {
+  df |>
+    mutate(
+      summary = str_c(fmt(median), " (", fmt(q15), ", ", fmt(q85), ")")
+    ) |>
+    select(species, group, variant, median, summary) |>
+    pivot_wider(names_from = variant, values_from = c(median, summary)) |>
+    transmute(species, group,
+      dedup = summary_dedup,
+      non_dedup = summary_non_dedup,
+      ratio_median = median_non_dedup / median_dedup,
+    )
+}
+
+prevalence_summary <- read_posterior_summary("prevalence")
+ra01_summary <- read_posterior_summary("ra01")
+```
+
+Each cell shows `median (q15, q85)`. The `ratio_median` column is non-dedup median / dedup median.
+
+Roughly speaking, we expect RA(1%) to increase by around `1 / (1 - dup_rate)`; these results seem largely consistent with that expectation.
+
+### Prevalence
+
+```{r}
+format_comparison(prevalence_summary) |>
+  mutate(ratio_median = signif(ratio_median, 2)) |>
+  kable()
+```
+
+### $RA_p(1\%)$
+
+```{r}
+format_comparison(ra01_summary) |>
+  mutate(ratio_median = signif(ratio_median, 2)) |>
+  kable()
+```
+
+### Median posterior estimates: dedup vs non-dedup
+
+```{r}
+bind_rows(.id = "parameter",
+  list(prevalence = prevalence_summary, ra01 = ra01_summary)
+) |>
+  select(parameter, variant, species, group, median) |>
+  pivot_wider(names_from = variant, values_from = median) |>
+  ggplot(aes(dedup, non_dedup, color = group)) +
+  geom_abline(color = "grey") +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10() +
+  facet_wrap(~parameter, scales = "free") +
+  scale_color_manual(values = colors_oi) +
+  guides(color = guide_legend(ncol = 2)) +
+  theme(legend.position = "bottom")
+```
+
+As expected, removing deduplication from the numerator tends to increase the RA(1%) estimates but has little impact on the prevalence estimates.
+
+## Compare full posteriors
+
+```{r}
+posteriors <- bind_rows(
+  .id = "variant",
+  list(
+    dedup = read_tsv(here("tables", "dedup", "posteriors.tsv")),
+    non_dedup = read_tsv(here("tables", "non_dedup", "posteriors.tsv"))
+  )
+) |>
+  arrange(group, species) |>
+  mutate(species = fct_inorder(species))
+```
+
+### Swabs
+
+```{r}
+#| fig-asp: 0.75
+posteriors |>
+  select(variant:group, mu_swab, phi_swab) |>
+  pivot_longer(ends_with("_swab")) |>
+  ggplot(aes(x = value, y = species, color = variant)) +
+  facet_row(~name, scales = "free_x") +
+  scale_color_manual(values = colors_oi) +
+  stat_pointinterval(position = position_dodge(width = 0.5)) +
+  scale_x_log10()
+```
+
+There is little impact on mu or phi for swabs, presumably because there was little duplication detected.
+
+### Wastewater
+
+```{r}
+#| fig-asp: 0.75
+posteriors |>
+  select(variant:group, mu_ww, phi_ww) |>
+  pivot_longer(ends_with("_ww")) |>
+  ggplot(aes(x = value, y = species, color = variant)) +
+  facet_row(~name, scales = "free_x") +
+  scale_color_manual(values = colors_oi) +
+  stat_pointinterval(position = position_dodge(width = 0.5)) +
+  scale_x_log10()
+```
+
+The estimate of phi tends to decrease alongside the increase in the estimate of mu---notable decreases can be seeen in all cases except for SARS-CoV-2 where mu is fairly stable.
+
+There are two potential explanations for the decrease in phi (increase in overdispersion):
+
+1. Removing deduplication increases the mean of the NB model (same reason that mu increases), which reduces the contribution of Poisson noise to the coefficient of variation (CV), forcing 1/phi to increase to compensate.
+2. The CV may increase relative to deduplicated counts, requiring further increases in 1/phi.
+
+The duplication rate does vary quite a bit among samples, but it's not obvious to me that the deduplicated relative abundances would be less noisy (since variation in dupliction rate could itself be a noise factor).
