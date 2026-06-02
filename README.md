@@ -5,6 +5,19 @@ Simon Grimm, Dan Rice, Mike McLaren
 Code and documentation supporting the NAO blog post [Estimating the sensitivity of wastewater metagenomic sequencing using nasal swabs](https://naobservatory.org/blog/swab-based-p2ra/)
 and its [Appendix](https://naobservatory.github.io/swab-based-p2ra/).
 
+## This fork
+
+This fork extends the original analysis to additionally fit the model using a
+**non-deduplicated** relative-abundance numerator. The denominator (total reads)
+is unchanged; only the numerator differs: deduplicated human-virus reads
+(`dedup_hv`, as in the original analysis) versus non-deduplicated reads
+(`non_dedup_hv`). Both numerator columns are already present in the input tables
+`tables/swabs-ra-summary.tsv` and `tables/ww-ra-summary.tsv`.
+
+The non-deduplicated estimates are more convenient for plugging into models that
+represent sequence duplication explicitly—e.g. as an independent parameter or as
+a function of sequencing depth and library complexity.
+
 ## Reproducing the statistical analysis
 
 To reproduce the model fits and diagnostics:
@@ -28,6 +41,24 @@ is `dedup` or `non_dedup`:
   Note that re-running the fitting script may shuffle the order of the posterior samples in this file.
 - `tables/<variant>/{prevalence,ra01}_posterior_summary.tsv` contain posterior 15th,
   50th, and 85th percentiles for prevalence and $RA_p(1\%)$ for all viruses.
+
+The downstream figures and notebooks (`scripts/violin_*_plot.py`,
+`statistics/appendix/index.qmd`, `statistics/model-checking/index.qmd`) default
+to the `dedup` variant via a one-line `VARIANT`/`variant` switch near the top of
+each file; set it to `non_dedup` to regenerate those outputs from the
+non-deduplicated fit.
+
+## Comparing the two fits
+
+`analysis/compare-fits/index.qmd` compares the `dedup` and `non_dedup` fits:
+per-sample duplication rates, and the resulting differences in the posterior
+estimates of prevalence and $RA_p(1\%)$. Render it with:
+```
+quarto render analysis/compare-fits/index.qmd
+```
+Broadly, dropping deduplication raises the $RA_p(1\%)$ estimates by roughly
+`1 / (1 - duplication rate)` while leaving prevalence estimates largely
+unchanged.
 
 ## Publishing the appendix (NAO-internal only)
 
