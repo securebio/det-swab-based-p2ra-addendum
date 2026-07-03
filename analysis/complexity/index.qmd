@@ -1,0 +1,154 @@
+---
+title: Estimate library complexity for MU CASPER samples
+author: Mike McLaren
+date: last-modified
+categories: [ ]
+execute:
+  echo: true
+  warning: true
+  cache: false
+knitr:
+  opts_chunk:
+    message: false
+format:
+  html:
+    embed-resources: true
+    toc: false
+    toc-depth: 2
+    number-sections: false
+    fig-format: svg
+    fig-dpi: 250
+    fig-width: 8
+    fig-asp: 0.618
+---
+
+```{r}
+library(tidyverse)
+library(fs)
+library(here)
+library(cowplot)
+library(ggbeeswarm)
+theme_set(theme_cowplot())
+
+# Okabe Ito color scheme with amber for yellow; see
+# https://easystats.github.io/see/reference/scale_color_okabeito.html
+colors_oi <- grDevices::palette.colors()
+colors_oi["yellow"] <- "#F5C710"
+colors_oi <- colors_oi |> unname()
+```
+
+```{r}
+focal_sample_metadata_raw <- here("tables/wastewater-sample-metadata.tsv") |>
+  read_tsv(col_types = "cccn")
+focal_sample_metadata <- focal_sample_metadata_raw |>
+  transmute(
+    sample,
+    sampling_date = ymd(paste0("20", date)),
+    public_loc_id = recode_values(location,
+      "DNI" ~ "MA_Boston_DITPN",
+      "DSI" ~ "MA_Boston_DITPS",
+    ),
+    total_reads = all_reads,
+    focal_sample = TRUE
+  ) |>
+  glimpse()
+focal_sample_map <- focal_sample_metadata |>
+  select(sampling_date, public_loc_id, focal_sample)
+```
+
+The table `data/casper-mu-vv-stats.tsv` has total reads and vertebrate virus metrics for composite WWTP CASPER samples that have been processed by MU and published in SRA.
+
+```{r}
+sample_stats <- read_tsv("data/casper-mu-vv-stats.tsv") |>
+  left_join(focal_sample_map, by = c("sampling_date", "public_loc_id")) |>
+  replace_na(list(focal_sample = FALSE)) |>
+  glimpse()
+```
+
+"Reads" here always means read pairs. VV = vertebrate virus.
+
+The metrics are
+
+- `total_reads`: Number of total (raw) sequencing reads
+- `vv_reads_dedup`: Number of distinct reads with validated taxonomic assignment to a VV (distinct = after sequence deduplication)
+- `vv_reads_est`: Number of reads with validated taxonomic assignment to a VV (without sequence deduplication), estimated by `vv_reads_dedup / (1 - vv_frac_dedup)`
+- `vv_frac_dedup`: `vv_reads_dedup / total_reads`
+- `vv_frac_est`: `vv_reads_est / total_reads`
+- `vv_duplicate_frac`: Fraction of VV reads that marked as duplicates of a designated non-duplicate sequence
+
+Two complications in the above are due to technical issues in our bioinformatics pipeline:
+
+- The total number of validated VV reads (without deduplication) is not directly reported by our pipeline, and so I estimate it from the number of distinct reads and the VV duplication rate.
+- The VV duplicate fraction that our pipeline reports is estimated from the full set of putative VV reads _before validation_. However, in practice the duplication fraction shows negligible difference between putative and validated VV reads.
+
+A future update will address these technical issues and switch to directly providing validated non-deduplicated VV reads and duplication rate.
+
+For a given sample, let
+
+- $F$ be the library complexity, or total number of distinct DNA fragments in the library;
+- $n$ be the total number of sequencing reads;
+- $n_{\text{eff}}$ be the number of distinct DNA fragments sequenced, i.e. the number of deduplicated sequencing reads.
+
+We assume the following relationship between these quantities,
+
+\begin{aligned} \label{eq-saturation}
+  n_{\text{eff}} = F \left(1 - e^{-n/F}\right).
+\end{aligned}
+
+Given $n$ and $n_{\text{eff}}$, we can numerically solve for $F$,
+
+```{r}
+estimate_library_complexity <- function(n, n_eff) {
+  f <- function(F, n, n_eff) {
+    F * (1 - exp(-n / F)) - n_eff
+  }
+
+  res <- uniroot(\(F) f(F, n, n_eff), c(1, 1e12))
+  res$root
+}
+```
+
+However, it is technically difficult and computationally intensive to perform sequence deduplication on all reads, whereas we already have decent estimates of both for VV reads. Therefore, we assume that the duplication rate is the same for all taxa, which enables us to estimate total library complexity from the complexity specifically of VV DNA fragments. Let $F_v$, $n_v$, and $n_{\text{eff,v}}$ be complexity, total reads, and distinct reads specifically from VV fragments. Our pipeline provides us estimates of $n_v$ and $n_{\text{eff,v}}$, from which we can estimate $F_v$; we then estimate $F$ as $F_v \cdot n / n_v$.
+
+Note, samples with too few total reads or deduplicated VV reads may not be representative of normal samples and also won't give reliable complexity estimates. We require samples to have at least 100M total reads and at least 100 VV reads.
+
+```{r}
+min_total_reads <- 100e6
+min_vv_reads_dedup <- 100
+
+complexity_est <- sample_stats |>
+  filter(
+    total_reads > min_total_reads,
+    vv_reads_dedup > min_vv_reads_dedup
+  ) |>
+  mutate(
+    vv_complexity = map2_dbl(vv_reads_est, vv_reads_dedup, estimate_library_complexity),
+    total_complexity = vv_complexity * total_reads / vv_reads_est
+  )
+```
+
+```{r}
+#| fig.asp = 1.7
+complexity_est |>
+  ggplot(aes(y = public_loc_id, total_complexity, alpha = focal_sample)) +
+  theme(legend.position = "bottom") +
+  scale_x_log10() +
+  scale_alpha_manual(values = c("TRUE" = 1, "FALSE" = 0.2)) +
+  geom_quasirandom()
+```
+
+Write the table with the complexity estimates:
+
+```{r}
+dir_create("output")
+write_tsv(complexity_est, "output/casper-mu-vv-stats-with-complexity.tsv")
+```
+
+# Version info {.appendix}
+
+:::{.callout-tip collapse="true"}
+## Expand for session info
+```{r session-info, echo = FALSE}
+sessioninfo::session_info(pkgs = "attached")
+```
+:::
