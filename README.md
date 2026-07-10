@@ -60,6 +60,24 @@ Broadly, dropping deduplication raises the $RA_p(1\%)$ estimates by roughly
 `1 / (1 - duplication rate)` while leaving prevalence estimates largely
 unchanged.
 
+## Estimating library complexity
+
+`analysis/complexity/index.qmd` estimates the library complexity (total number
+of distinct DNA fragments) of composite WWTP CASPER samples processed by MU,
+using vertebrate-virus read counts before and after deduplication together with
+a saturation model. It reads
+`analysis/complexity/data/casper-mu-vv-stats.tsv` and writes per-sample
+complexity estimates to
+`analysis/complexity/output/casper-mu-vv-stats-with-complexity.tsv`. Both this
+output table and the rendered `analysis/complexity/index.html` are checked into
+the repository, so they can be used without re-rendering. To regenerate them,
+run:
+```
+quarto render analysis/complexity/index.qmd
+```
+These complexity estimates support models that represent sequence duplication
+explicitly (see [This fork](#this-fork)).
+
 ## Publishing the appendix (NAO-internal only)
 
 To publish an update to the appendix, make any changes, then run:
