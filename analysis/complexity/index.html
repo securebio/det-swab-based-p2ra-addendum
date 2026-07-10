@@ -2418,7 +2418,7 @@ $ focal_sample  &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>focal_sample_map <span class="ot">&lt;-</span> focal_sample_metadata <span class="sc">|&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sampling_date, public_loc_id, focal_sample)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The table <code>data/casper-mu-vv-stats.tsv</code> has total reads and vertebrate virus metrics for composite WWTP CASPER samples that have been processed by MU and published in SRA.</p>
+<p>The input file <code>data/casper-mu-vv-stats.tsv</code> is exported from a private repository which links SecureBio’s pipeline results with public metadata associated with each sample and prepares a table with the required pipeline results (total reads and vertebrate viral reads with and without deduplication) with public sample and location identifiers. It includes all WWTP CASPER samples that have been processed by MU and published in SRA for which results were available, exluding a small number of samples which used a non-standard processing protocol.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sample_stats <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">&quot;data/casper-mu-vv-stats.tsv&quot;</span>) <span class="sc">|&gt;</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(focal_sample_map, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;sampling_date&quot;</span>, <span class="st">&quot;public_loc_id&quot;</span>)) <span class="sc">|&gt;</span></span>
@@ -2545,7 +2545,6 @@ $ focal_sample           &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, F
  ggplot2    * 4.0.3   2026-04-22 [2] CRAN (R 4.6.0)
  here       * 1.0.2   2025-09-15 [2] CRAN (R 4.6.0)
  lubridate  * 1.9.5   2026-02-04 [2] CRAN (R 4.6.0)
- nvimcom    * 0.9.94  2026-04-30 [2] local
  purrr      * 1.2.2   2026-04-10 [1] CRAN (R 4.6.0)
  readr      * 2.2.0   2026-02-19 [2] CRAN (R 4.6.0)
  stringr    * 1.6.0   2025-11-04 [2] CRAN (R 4.6.0)

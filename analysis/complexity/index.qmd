@@ -56,7 +56,7 @@ focal_sample_map <- focal_sample_metadata |>
   select(sampling_date, public_loc_id, focal_sample)
 ```
 
-The table `data/casper-mu-vv-stats.tsv` has total reads and vertebrate virus metrics for composite WWTP CASPER samples that have been processed by MU and published in SRA.
+The input file `data/casper-mu-vv-stats.tsv` is exported from a private repository which links SecureBio's pipeline results with public metadata associated with each sample and prepares a table with the required pipeline results (total reads and vertebrate viral reads with and without deduplication) with public sample and location identifiers. It includes all WWTP CASPER samples that have been processed by MU and published in SRA for which results were available, exluding a small number of samples which used a non-standard processing protocol.
 
 ```{r}
 sample_stats <- read_tsv("data/casper-mu-vv-stats.tsv") |>
