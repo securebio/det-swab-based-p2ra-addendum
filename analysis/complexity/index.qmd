@@ -65,23 +65,13 @@ sample_stats <- read_tsv("data/casper-mu-vv-stats.tsv") |>
   glimpse()
 ```
 
-"Reads" here always means read pairs. VV = vertebrate virus.
+Throughout, "reads" is shorthand for read pairs (not single reads, which is two times greater), and "VV" is used as an abbreviation for "vertebrate virus."
 
 The metrics are
 
 - `total_reads`: Number of total (raw) sequencing reads
-- `vv_reads_dedup`: Number of distinct reads with validated taxonomic assignment to a VV (distinct = after sequence deduplication)
-- `vv_reads_est`: Number of reads with validated taxonomic assignment to a VV (without sequence deduplication), estimated by `vv_reads_dedup / (1 - vv_frac_dedup)`
-- `vv_frac_dedup`: `vv_reads_dedup / total_reads`
-- `vv_frac_est`: `vv_reads_est / total_reads`
-- `vv_duplicate_frac`: Fraction of VV reads that marked as duplicates of a designated non-duplicate sequence
-
-Two complications in the above are due to technical issues in our bioinformatics pipeline:
-
-- The total number of validated VV reads (without deduplication) is not directly reported by our pipeline, and so I estimate it from the number of distinct reads and the VV duplication rate.
-- The VV duplicate fraction that our pipeline reports is estimated from the full set of putative VV reads _before validation_. However, in practice the duplication fraction shows negligible difference between putative and validated VV reads.
-
-A future update will address these technical issues and switch to directly providing validated non-deduplicated VV reads and duplication rate.
+- `vv_reads`: Number of reads with validated taxonomic assignment to a VV _without_ any sequence deduplication
+- `vv_reads_dedup`: Number of distinct reads with validated taxonomic assignment to a VV, where _distinct_ means after collapsing reads flagged as duplicates of one another
 
 For a given sample, let
 
@@ -122,8 +112,8 @@ complexity_est <- sample_stats |>
     vv_reads_dedup > min_vv_reads_dedup
   ) |>
   mutate(
-    vv_complexity = map2_dbl(vv_reads_est, vv_reads_dedup, estimate_library_complexity),
-    total_complexity = vv_complexity * total_reads / vv_reads_est
+    vv_complexity = map2_dbl(vv_reads, vv_reads_dedup, estimate_library_complexity),
+    total_complexity = vv_complexity * total_reads / vv_reads
   )
 ```
 
