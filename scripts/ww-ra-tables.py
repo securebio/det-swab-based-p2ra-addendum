@@ -86,8 +86,16 @@ with open(os.path.join(validation_output_dir, "ww-classified-all-reads.tsv")) as
             samples[key]["dedup"] += 1
 
 # Process non-validated reads
+seen_non_validated = set()
 with open(os.path.join(validation_output_dir, "ww-non-validated-reads.tsv")) as f:
     for row in csv.DictReader(f, delimiter="\t"):
+        # prep-ww-validation.py writes one row per mate under a single read_id.
+        # As with classified reads above, we should count each read pair once.
+        read_id = row["read_id"]
+        if read_id in seen_non_validated:
+            continue
+        seen_non_validated.add(read_id)
+
         date = datetime.strptime(row["date"], "%Y-%m-%d")
         if not is_date_in_range(date):
             continue

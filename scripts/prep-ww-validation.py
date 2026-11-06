@@ -132,6 +132,8 @@ for dedup_group_tsv in os.listdir("deliveries/dedup-reads"):
             query_qual_fwd = row["query_qual_fwd"]
             query_qual_rev = row["query_qual_rev"]
 
+            # One row per mate, both under the same read_id. Anything counting
+            # these rows downstream must dedupe on read_id to count read pairs.
             for seq, qual in zip(
                 (query_seq_fwd, query_seq_rev),
                 (query_qual_fwd, query_qual_rev),

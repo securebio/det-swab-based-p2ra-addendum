@@ -29,7 +29,7 @@ date	location	assignment	species	group	non_dedup_hv	dedup_hv	all_reads
 250108	DNI	Rhinovirus C56	Rhinovirus C	Rhinoviruses	10	5	1053867915
 250108	DNI	Rhinovirus C7	Rhinovirus C	Rhinoviruses	3	1	1053867915
 250108	DNI	Rhinovirus C8	Rhinovirus C	Rhinoviruses	7	3	1053867915
-250108	DNI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	324	312	1053867915
+250108	DNI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	162	156	1053867915
 250108	DSI	Flu B	Flu B	Influenza	8	6	1201312284
 250108	DSI	H1N1	H1N1	Influenza	29	19	1201312284
 250108	DSI	H3N2	H3N2	Influenza	51	31	1201312284
@@ -54,7 +54,7 @@ date	location	assignment	species	group	non_dedup_hv	dedup_hv	all_reads
 250108	DSI	Rhinovirus C44	Rhinovirus C	Rhinoviruses	1	1	1201312284
 250108	DSI	Rhinovirus C55	Rhinovirus C	Rhinoviruses	2	1	1201312284
 250108	DSI	Rhinovirus C7	Rhinovirus C	Rhinoviruses	3	3	1201312284
-250108	DSI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	238	232	1201312284
+250108	DSI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	119	116	1201312284
 250115	DNI	H1N1	H1N1	Influenza	2	2	628858348
 250115	DNI	H3N2	H3N2	Influenza	18	5	628858348
 250115	DNI	Human coronavirus 229E	HCoV-229E	Coronaviruses (seasonal)	3	2	628858348
@@ -72,7 +72,7 @@ date	location	assignment	species	group	non_dedup_hv	dedup_hv	all_reads
 250115	DNI	Rhinovirus C20	Rhinovirus C	Rhinoviruses	12	2	628858348
 250115	DNI	Rhinovirus C34	Rhinovirus C	Rhinoviruses	8	1	628858348
 250115	DNI	Rhinovirus C7	Rhinovirus C	Rhinoviruses	1	1	628858348
-250115	DNI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	78	58	628858348
+250115	DNI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	39	29	628858348
 250115	DSI	H3N2	H3N2	Influenza	4	3	1012706733
 250115	DSI	Human coronavirus HKU1	HCoV-HKU1	Coronaviruses (seasonal)	10	1	1012706733
 250115	DSI	Human coronavirus NL63	HCoV-NL63	Coronaviruses (seasonal)	14	4	1012706733
@@ -86,7 +86,7 @@ date	location	assignment	species	group	non_dedup_hv	dedup_hv	all_reads
 250115	DSI	Rhinovirus C2	Rhinovirus C	Rhinoviruses	3	3	1012706733
 250115	DSI	Rhinovirus C34	Rhinovirus C	Rhinoviruses	5	2	1012706733
 250115	DSI	Rhinovirus C8	Rhinovirus C	Rhinoviruses	4	1	1012706733
-250115	DSI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	284	278	1012706733
+250115	DSI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	142	139	1012706733
 250122	DNI	Flu B	Flu B	Influenza	1	1	1077167119
 250122	DNI	H1N1	H1N1	Influenza	21	7	1077167119
 250122	DNI	H3N2	H3N2	Influenza	52	9	1077167119
@@ -105,7 +105,7 @@ date	location	assignment	species	group	non_dedup_hv	dedup_hv	all_reads
 250122	DNI	Rhinovirus C4	Rhinovirus C	Rhinoviruses	3	1	1077167119
 250122	DNI	Rhinovirus C7	Rhinovirus C	Rhinoviruses	6	1	1077167119
 250122	DNI	Rhinovirus C8	Rhinovirus C	Rhinoviruses	8	1	1077167119
-250122	DNI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	330	272	1077167119
+250122	DNI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	165	136	1077167119
 250122	DSI	Flu B	Flu B	Influenza	6	2	983397280
 250122	DSI	H1N1	H1N1	Influenza	15	4	983397280
 250122	DSI	H3N2	H3N2	Influenza	50	15	983397280
@@ -123,7 +123,7 @@ date	location	assignment	species	group	non_dedup_hv	dedup_hv	all_reads
 250122	DSI	Rhinovirus C34	Rhinovirus C	Rhinoviruses	4	3	983397280
 250122	DSI	Rhinovirus C44	Rhinovirus C	Rhinoviruses	3	1	983397280
 250122	DSI	Rhinovirus C55	Rhinovirus C	Rhinoviruses	3	1	983397280
-250122	DSI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	330	296	983397280
+250122	DSI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	165	148	983397280
 250129	DNI	H1N1	H1N1	Influenza	54	11	656678526
 250129	DNI	H3N2	H3N2	Influenza	69	14	656678526
 250129	DNI	Human coronavirus HKU1	HCoV-HKU1	Coronaviruses (seasonal)	6	1	656678526
@@ -143,7 +143,7 @@ date	location	assignment	species	group	non_dedup_hv	dedup_hv	all_reads
 250129	DNI	Rhinovirus C2	Rhinovirus C	Rhinoviruses	8	2	656678526
 250129	DNI	Rhinovirus C55	Rhinovirus C	Rhinoviruses	10	1	656678526
 250129	DNI	Rhinovirus C56	Rhinovirus C	Rhinoviruses	6	1	656678526
-250129	DNI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	284	232	656678526
+250129	DNI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	142	116	656678526
 250129	DSI	Flu B	Flu B	Influenza	9	3	816170175
 250129	DSI	H1N1	H1N1	Influenza	38	13	816170175
 250129	DSI	H3N2	H3N2	Influenza	56	23	816170175
@@ -163,7 +163,7 @@ date	location	assignment	species	group	non_dedup_hv	dedup_hv	all_reads
 250129	DSI	Rhinovirus C2	Rhinovirus C	Rhinoviruses	9	2	816170175
 250129	DSI	Rhinovirus C4	Rhinovirus C	Rhinoviruses	2	1	816170175
 250129	DSI	Rhinovirus C44	Rhinovirus C	Rhinoviruses	6	1	816170175
-250129	DSI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	170	148	816170175
+250129	DSI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	85	74	816170175
 250205	DNI	H1N1	H1N1	Influenza	18	7	1173286887
 250205	DNI	H3N2	H3N2	Influenza	9	6	1173286887
 250205	DNI	Human coronavirus 229E	HCoV-229E	Coronaviruses (seasonal)	7	2	1173286887
@@ -175,7 +175,7 @@ date	location	assignment	species	group	non_dedup_hv	dedup_hv	all_reads
 250205	DNI	Rhinovirus C1	Rhinovirus C	Rhinoviruses	1	1	1173286887
 250205	DNI	Rhinovirus C11	Rhinovirus C	Rhinoviruses	1	1	1173286887
 250205	DNI	Rhinovirus C55	Rhinovirus C	Rhinoviruses	4	1	1173286887
-250205	DNI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	82	80	1173286887
+250205	DNI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	41	40	1173286887
 250205	DSI	H1N1	H1N1	Influenza	17	10	750183501
 250205	DSI	H3N2	H3N2	Influenza	8	5	750183501
 250205	DSI	HPIV4b	HPIV4	Mononegavirales	1	1	750183501
@@ -188,7 +188,7 @@ date	location	assignment	species	group	non_dedup_hv	dedup_hv	all_reads
 250205	DSI	Rhinovirus C4	Rhinovirus C	Rhinoviruses	2	1	750183501
 250205	DSI	Rhinovirus C55	Rhinovirus C	Rhinoviruses	5	1	750183501
 250205	DSI	Rhinovirus C56	Rhinovirus C	Rhinoviruses	2	2	750183501
-250205	DSI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	62	62	750183501
+250205	DSI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	31	31	750183501
 250212	DNI	Flu B	Flu B	Influenza	1	1	1059731486
 250212	DNI	H1N1	H1N1	Influenza	58	25	1059731486
 250212	DNI	H3N2	H3N2	Influenza	45	15	1059731486
@@ -206,7 +206,7 @@ date	location	assignment	species	group	non_dedup_hv	dedup_hv	all_reads
 250212	DNI	Rhinovirus C34	Rhinovirus C	Rhinoviruses	7	2	1059731486
 250212	DNI	Rhinovirus C36	Rhinovirus C	Rhinoviruses	1	1	1059731486
 250212	DNI	Rhinovirus C44	Rhinovirus C	Rhinoviruses	1	1	1059731486
-250212	DNI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	136	120	1059731486
+250212	DNI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	68	60	1059731486
 250212	DSI	H1N1	H1N1	Influenza	13	10	1003451236
 250212	DSI	H3N2	H3N2	Influenza	17	10	1003451236
 250212	DSI	HPIV4b	HPIV4	Mononegavirales	2	1	1003451236
@@ -214,4 +214,4 @@ date	location	assignment	species	group	non_dedup_hv	dedup_hv	all_reads
 250212	DSI	Human coronavirus NL63	HCoV-NL63	Coronaviruses (seasonal)	5	3	1003451236
 250212	DSI	Human coronavirus OC43	HCoV-OC43	Coronaviruses (seasonal)	12	6	1003451236
 250212	DSI	Rhinovirus C	Rhinovirus C	Rhinoviruses	2	1	1003451236
-250212	DSI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	74	60	1003451236
+250212	DSI	Severe acute respiratory syndrome coronavirus 2	SARS-CoV-2	Coronaviruses (SARS-CoV-2)	37	30	1003451236
